@@ -1,0 +1,21 @@
+name: Run C++ Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: sudo apt-get install g++ make -y
+
+      - name: Compile Code
+        run: make
+
+      - name: Run Tests
+        run: |
+          ./main < tests/test_input.txt > output.txt
+          diff -w output.txt tests/expected_output.txt || (echo "Test failed!" && exit 1)
